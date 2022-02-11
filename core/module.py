@@ -1,6 +1,7 @@
 import dis
 import requests_html
 from functools import *
+from core.settings import *
 
 
 class ChapterInfo():
@@ -63,6 +64,14 @@ class BaseModule:
     ''' site domain '''
     session: requests_html.HTMLSession = None
     ''' request_html session '''
+    proxies: dict = None
+    ''' proxies '''
+
+    def _get(self, url, params=...):
+        return self.session.get(url, params, proxies=self.proxies)
+
+    def _post(self, url, params=...):
+        return self.session.post(url, params, proxies=self.proxies)
 
     def search_defined(self) -> bool:
         return not is_empty_function(self.search)

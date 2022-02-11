@@ -44,7 +44,7 @@ def modules(context, each) -> list[list[str]]:
         preload_tile = str(modules[i].preload_tile_defined()).ljust(5)
         preload_chapter = str(modules[i].preload_chapter_defined()).ljust(5)
 
-        click.echo("{}\t {}\t search: {}\t preload_tile: {}\t preload_chapter: {}".format(
+        click.echo("{}\t {}\t search: {}\t preload-tile: {}\t preload-chapter: {}".format(
             name, server, search, preload_tile, preload_chapter))
 
         result.append([name, server, search, preload_tile, preload_chapter])

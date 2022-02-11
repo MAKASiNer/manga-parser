@@ -1,6 +1,6 @@
 from imp import reload
 from core.module import *
-from core.config import LOGGER, SESSION
+from core.config import *
 
 
 class Module(BaseModule):
@@ -22,7 +22,7 @@ class Module(BaseModule):
             }
         """
 
-        with self.session.post(self.server + "/search", {"q": q}) as response:
+        with self._post(self.server + "/search", {"q": q}) as response:
             data = response.html.render(
                 script=script, reload=False, timeout=timeout)
             if len(data) > offset:
@@ -55,7 +55,7 @@ class Module(BaseModule):
             }
         """
 
-        with self.session.get(url, params={"mtr": 1}) as response:
+        with self._get(url) as response:
             data = response.html.render(script=script, timeout=timeout)
 
         def f(item):
@@ -81,7 +81,7 @@ class Module(BaseModule):
             }
         """
 
-        with self.session.get(url, params={"mtr": 1}) as response:
+        with self._get(url, {"mtr": 1}) as response:
             data = response.html.render(script=script, timeout=timeout)
 
         return ChapterInfo(

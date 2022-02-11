@@ -9,8 +9,8 @@ from pathvalidate import sanitize_filename
 
 url = "https://mintmanga.live/vasilisk"
 
-module = select_module(for_url=url)
-tile = module.preload_tile(url)
+#module = select_module(for_url=url)
+#tile = module.preload_tile(url)
 # tile.title = sanitize_filename(tile.title)
 
 # os.makedirs(os.path.join(PACK_FOLDER, tile.title), exist_ok=True)
@@ -27,4 +27,4 @@ tile = module.preload_tile(url)
 
 # packer.join(tile.title, paths[::-1])
 
-print(json.dumps(TileInfo_to_dict(tile), indent=2))
+#print(json.dumps(TileInfo_to_dict(tile), indent=2))

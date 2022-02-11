@@ -13,4 +13,10 @@ INSTALED_MODULES = [
     "empty",
 ]
 
+PROXYIES = {
+    # "http": ...,
+    # "https": ...,
+    # "ftp": ...,
+}
+
 DEFAULT_MODULE = INSTALED_MODULES[0]
