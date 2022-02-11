@@ -23,7 +23,8 @@ class Module(BaseModule):
         """
 
         with self.session.post(self.server + "/search", {"q": q}) as response:
-            data = response.html.render(script=script, reload=False, timeout=timeout)
+            data = response.html.render(
+                script=script, reload=False, timeout=timeout)
             if len(data) > offset:
                 data = data[:offset]
 
@@ -60,7 +61,7 @@ class Module(BaseModule):
         def f(item):
             i = item[0]
             chapter = item[1]
-            return (i, ChapterInfo(url=self.server + chapter["href"], title=chapter["title"]))
+            return (i, ChapterInfo(url=self.server + chapter["href"], title=chapter["title"].strip()))
 
         return TileInfo(
             url=url,

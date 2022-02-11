@@ -1,4 +1,5 @@
 import sys
+import json
 import click
 
 from core.tools import *
@@ -20,15 +21,15 @@ def app(context, module):
         sys.exit()
 
 
-@app.command(help="Shows a list of installed parsing modules.")
-@click.option('-a', '--all', is_flag=True, help="Show a list of all modules")
+@app.command(help="Shows the installed parsing module.")
+@click.option('-e', '--each', is_flag=True, help="Show each of all modules.")
 @click.pass_context
-def modules(context, all) -> list[list[str]]:
+def modules(context, each) -> list[list[str]]:
     max_name_len = len(max(INSTALED_MODULES, key=lambda x: len(x)))
     max_server_len = len(max(MODULES, key=lambda x: len(x.server)).server)
 
-    if all:
-        modules= MODULES
+    if each:
+        modules = MODULES
         instaled_modules = INSTALED_MODULES
     else:
         i = INSTALED_MODULES.index(context.obj["MODULE"])
@@ -51,9 +52,9 @@ def modules(context, all) -> list[list[str]]:
 
 
 @app.command(help="Search using the module.")
-@click.option('-q', '--query', help="Search query.")
+@click.option('-q', '--query', required=True, help="Search query.")
 @click.option('--offset', default=1, help="Мaximum number of results.")
-@click.option('--timeout', default=10, help="Timeout in seconds.")
+@click.option('--timeout', default=8.0, help="Timeout in seconds.")
 @click.pass_context
 def search(context, query, offset, timeout) -> list[TileInfo]:
     i = INSTALED_MODULES.index(context.obj["MODULE"])
@@ -75,19 +76,59 @@ def search(context, query, offset, timeout) -> list[TileInfo]:
     return result
 
 
-@app.command(help="Upload information.")
-@click.option('-u', '--url', help="Chapter address.")
+@app.command(help="Upload information about tile.")
+@click.option('-u', '--url', required=True, help="Tile address.")
 @click.option('-a', '--auto', is_flag=True, help="Automatically select module.")
-@click.option('--timeout', default=10, help="Timeout in seconds.")
+@click.option('-p', '--preview', is_flag=True, help="Show execution result.")
+@click.option('--timeout', default=8.0, help="Timeout in seconds.")
 @click.pass_context
-def preload_tile(context, url, auto, timeout) -> TileInfo:
+def preload_tile(context, url, auto, preview, timeout) -> TileInfo:
     if auto:
         module = select_module(for_url=url)
+        i = MODULES.index(module)
     else:
         i = INSTALED_MODULES.index(context.obj["MODULE"])
         module = MODULES[i]
 
-    print(module)
+    if not module.preload_tile_defined():
+        click.echo(
+            f"The module '{INSTALED_MODULES[i]}' is unable to execute this command.")
+        return TileInfo()
+
+    tile_info = module.preload_tile(url=url, timeout=timeout)
+
+    if preview:
+        click.echo(json.dumps(TileInfo_to_dict(tile_info), indent=4))
+
+    return tile_info
+
+
+@app.command(help="Upload information about chapter.")
+@click.option('-u', '--url', required=True, help="Chapter address.")
+@click.option('-a', '--auto', is_flag=True, help="Automatically select module.")
+@click.option('-p', '--preview', is_flag=True, help="Show execution result.")
+@click.option('--timeout', default=8.0, help="Timeout in seconds.")
+@click.pass_context
+def preload_chapter(context, url, auto, preview, timeout) -> TileInfo:
+    if auto:
+        module = select_module(for_url=url)
+        i = MODULES.index(module)
+    else:
+        i = INSTALED_MODULES.index(context.obj["MODULE"])
+        module = MODULES[i]
+
+    if not module.preload_chapter_defined():
+        click.echo(
+            f"The module '{INSTALED_MODULES[i]}' is unable to execute this command.")
+        return TileInfo()
+
+    chapter_info = module.preload_chapter(url=url, timeout=timeout)
+
+    if preview:
+        click.echo(json.dumps(ChapterInfo_to_dict(chapter_info), indent=4))
+
+    return chapter_info
+
 
 app(obj={})
 SESSION.close()
