@@ -12,30 +12,37 @@ class Logger:
         else:
             raise FileNotFoundError("Incorrect log folder")
 
-    def log(self, msg):
+    def log(self, msg, nl=True, timepoint=True):
         time = str(datetime.datetime.now().time())
-        return self.stream.write("[{}] {}\n".format(time, msg))
+        return self.stream.write("{} {}{}".format(
+            f"[{time}]" if timepoint else '',
+            msg,
+            '\n' if nl else ''
+        ))
 
     def logging(self, func):
         def wrapper(*args, **kwargs):
-            res = func(*args, **kwargs)
-
             if self.debug:
-                self.log('{} FROM {} WITH *{} **{} => {}'.format(
+                self.log('{} FROM {} WITH *{} **{} =>'.format(
                     func.__name__,
                     func.__module__,
                     args,
                     kwargs,
-                    res
-                ))
-                return res
-                
+                ), nl=False)
+
             else:
-                self.log('{}.{}'.format(
+                self.log('{}.{} =>'.format(
                     func.__module__,
                     func.__name__,
-                ))
-                return res
+                ), nl=False)
+
+            res = func(*args, **kwargs)
+
+            if self.debug:
+                self.log(str(res), timepoint=False)
+            else:
+                self.log(type(res), timepoint=False)
+            return res
 
         return wrapper
 

@@ -1,30 +1,14 @@
-import json
+from pathvalidate import sanitize_filename
 from core.tools import *
 from core.module import *
 from core.packer import *
 from core.config import *
 from core.settings import *
-from pathvalidate import sanitize_filename
 
+import re
 
-url = "https://mintmanga.live/vasilisk"
+regex = re.compile(
+    r"(http|ftp|https):\/\/[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+")
 
-#module = select_module(for_url=url)
-#tile = module.preload_tile(url)
-# tile.title = sanitize_filename(tile.title)
-
-# os.makedirs(os.path.join(PACK_FOLDER, tile.title), exist_ok=True)
-# packer = Packer(os.path.join(PACK_FOLDER, tile.title))
-
-# paths = []
-# for i, chapter in list(tile.chapters.items()):
-#     chapter = module.preload_chapter(chapter.url)
-#     chapter.title = sanitize_filename(chapter.title)
-#     print(f"PRELOADING '{chapter.title}' IS COMPLETED")
-#     pages = LOADER.load_imgs(chapter.pages)
-#     print(f"LOADING '{chapter.title}' IS COMPLETED")
-#     paths += [packer.save_pdf(chapter.title, pages)]
-
-# packer.join(tile.title, paths[::-1])
-
-#print(json.dumps(TileInfo_to_dict(tile), indent=2))
+server = regex.match("https://animego.org/anime/memuary-vanitasa-1803")[0]
+print(server)

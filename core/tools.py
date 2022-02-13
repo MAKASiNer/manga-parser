@@ -45,4 +45,7 @@ def TileInfo_to_dict(tile: TileInfo) -> dict:
     for i, chapter in tile.chapters.items():
         chapters[i] = ChapterInfo_to_dict(chapter)
 
-    return TileInfo(url=tile.url, title=tile.title, chapters=chapters).__dict__
+    return TileInfo(url=tile.url,
+                    title=tile.title,
+                    tags=tile.tags,
+                    chapters=chapters).__dict__

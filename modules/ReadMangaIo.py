@@ -1,4 +1,3 @@
-from imp import reload
 from core.module import *
 from core.config import *
 
@@ -6,6 +5,7 @@ from core.config import *
 class Module(BaseModule):
     server = "https://readmanga.io"
     session = SESSION
+    proxies = PROXYIES
 
     @LOGGER.logging
     def search(self, q: str, offset: int = 1, timeout=8.0) -> list[TileInfo]:
@@ -42,6 +42,7 @@ class Module(BaseModule):
             () => {
                 data = {};
                 data["title"] = $("meta[itemprop='name']")[0].getAttribute("content");
+                data["tags"] = $("span.elem_genre").text();
                 data["chapters"] = Object();
                 i = 0;
                 rm_h.chapters.changeOrder();
@@ -66,6 +67,7 @@ class Module(BaseModule):
         return TileInfo(
             url=url,
             title=data["title"].strip(),
+            tags=[s.strip() for s in data["tags"].split(',')],
             chapters=dict([f(i) for i in data["chapters"].items()])
         )
 

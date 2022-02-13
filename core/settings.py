@@ -1,7 +1,7 @@
 import os
 
 
-DEBUG = True
+DEBUG = False
 
 LOG_FOLDER = os.path.abspath("logs")
 PACK_FOLDER = os.path.abspath("downloads")
@@ -13,10 +13,10 @@ INSTALED_MODULES = [
     "empty",
 ]
 
+DEFAULT_MODULE = INSTALED_MODULES[0]
+
 PROXYIES = {
     # "http": ...,
     # "https": ...,
     # "ftp": ...,
 }
-
-DEFAULT_MODULE = INSTALED_MODULES[0]

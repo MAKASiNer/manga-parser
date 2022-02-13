@@ -25,6 +25,7 @@ MODULES = []
 for m in INSTALED_MODULES:
     try:
         module = import_module(f"modules.{m}").Module()
-    except ModuleNotFoundError:
-        module = BaseModule()
+    except (ModuleNotFoundError, ValueError) as err:
+        LOGGER.log(err)
+        module = BaseModule()  
     MODULES.append(module)

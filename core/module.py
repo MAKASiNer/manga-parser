@@ -1,3 +1,4 @@
+import re
 import dis
 import requests_html
 from functools import *
@@ -15,7 +16,7 @@ class ChapterInfo():
         Args:
             url (str): The url of the chapter.
             title (str): The title of the chapter.
-            pages (list[str]): Images URLs of each pages.
+            pages (list[str]): Images URLs or text of each pages.
         '''
         self.url = url
         self.title = title
@@ -31,16 +32,19 @@ class TileInfo():
         self,
         url: str = None,
         title: str = None,
-        chapters: dict[int: ChapterInfo] = {},
+        tags: list[str] = [],
+        chapters: dict[int, ChapterInfo] = {},
     ) -> None:
         '''
         Args:
             url (str): The URL of the manga.
             title (str): The title of the manga.
+            tags (list[str]): A list of strings that are tags for the tile.
             chapters (dict[int: ChapterInfo]): A dictionary of chapter numbers to ChapterInfo objects.
         '''
         self.url = url
         self.title = title
+        self.tags = tags
         self.chapters = chapters
 
     def __str__(self) -> str:
@@ -67,15 +71,33 @@ class BaseModule:
     proxies: dict = None
     ''' proxies '''
 
-    def _get(self, url, params=...):
-        return self.session.get(url, params, proxies=self.proxies)
+    def __init__(self) -> None:
+        protocol_pattern = r"(http|ftp|https):\/\/"
+        domain_pattern = r"[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+"
 
-    def _post(self, url, params=...):
-        return self.session.post(url, params, proxies=self.proxies)
+        if self.server in ("undefined", ..., None):
+            pass
+
+        elif not re.match(protocol_pattern + domain_pattern, self.server):
+            raise ValueError(
+                f"Incorrect server '{self.server}' (must contain protocol and domain)")
+
+    def _get(self, url, params=None):
+        return self.session.get(url, params=params, proxies=self.proxies)
+
+    def _post(self, url, params=None):
+        return self.session.post(url, data=params, proxies=self.proxies)
 
     def search_defined(self) -> bool:
         return not is_empty_function(self.search)
 
+    def preload_chapter_defined(self) -> bool:
+        return not is_empty_function(self.preload_chapter)
+
+    def preload_tile_defined(self) -> bool:
+        return not is_empty_function(self.preload_tile)
+
+    # --------------------------------------------------------------------------
     def search(self, q: str, offset: int = 1, timeout=8.0) -> list[TileInfo]:
         '''
         This function searches for tiles that match the given query
@@ -89,9 +111,6 @@ class BaseModule:
           A list of TileInfo objects.
         '''
 
-    def preload_tile_defined(self) -> bool:
-        return not is_empty_function(self.preload_tile)
-
     def preload_tile(self, url: str, timeout=8.0) -> TileInfo:
         '''
         This function is used to preload a tile
@@ -104,9 +123,6 @@ class BaseModule:
             TileInfo object
         '''
 
-    def preload_chapter_defined(self) -> bool:
-        return not is_empty_function(self.preload_chapter)
-
     def preload_chapter(self, url: str, timeout=8.0) -> ChapterInfo:
         '''
         This function is used to preload chapter pages
@@ -118,6 +134,7 @@ class BaseModule:
         Returns:
             ChapterInfo object
         '''
+    # --------------------------------------------------------------------------
 
 
 def is_empty_function(function) -> bool:
