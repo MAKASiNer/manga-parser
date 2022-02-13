@@ -1,6 +1,5 @@
 import sys
 import json
-from unittest import result
 import click
 from pathvalidate import sanitize_filename
 
@@ -65,7 +64,8 @@ def _modules(context, default) -> list[list[str]]:
 def search(context, query, offset, timeout) -> list[TileInfo]:
     result = _search(context, query, offset, timeout)
 
-    max_title_len = len(max(result, key=lambda x: len(x.title)).title)
+    if result:
+        max_title_len = len(max(result, key=lambda x: len(x.title)).title)
     for tile_info in result:
         title = tile_info.title.ljust(max_title_len, ".")
         url = tile_info.url
@@ -98,7 +98,7 @@ def _search(context, query, offset, timeout) -> list[TileInfo]:
 @click.option('-t', '--timeout', default=8.0, help="Timeout in seconds.")
 @click.pass_context
 def preload_tile(context, url, auto, show, timeout) -> TileInfo:
-    result = _preload_tile(context, url, auto, show, timeout)
+    result = _preload_tile(context, url, auto, timeout)
 
     if show:
         click.echo(json.dumps(TileInfo_to_dict(result), indent=4))
@@ -121,10 +121,11 @@ def _preload_tile(context, url, auto, timeout) -> TileInfo:
 
     try:
         tile_info = module.preload_tile(url=url, timeout=timeout)
+        return tile_info
+
     except BaseException as err:
         click.echo(f"{err} exception occurred.")
-
-    return tile_info
+        return TileInfo()
 
 
 @app.command(help="Upload information about chapter.")
@@ -157,10 +158,11 @@ def _preload_chapter(context, url, auto, timeout) -> ChapterInfo:
 
     try:
         chapter_info = module.preload_chapter(url=url, timeout=timeout)
+        return chapter_info
+
     except BaseException as err:
         click.echo(f"{err} exception occurred.")
-
-    return chapter_info
+        return ChapterInfo()
 
 
 @app.command(help="Loads chapters and saves them.")
@@ -189,8 +191,8 @@ def _load(context, url, auto, timeout, output, begin, offset) -> list[str]:
     packer = Packer(output)
 
     chapters = list(tile.chapters.items())
-    if len(chapters) > begin:
-        chapters = chapters[begin:]
+    if len(chapters) >= begin:
+        chapters = chapters[begin - 1:]
     if len(chapters) > offset:
         chapters = chapters[:offset]
 

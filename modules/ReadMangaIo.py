@@ -15,7 +15,7 @@ class Module(BaseModule):
                 $("div.tile").each(function () {
                     elm = $("div.desc > h3 > a", $(this))[0]
                     href = elm.getAttribute("href");
-                    title = elm.textContent
+                    title = elm.textContent;
                     data.push({"href": href, "title": title});
                 });
                 return data;
@@ -43,7 +43,7 @@ class Module(BaseModule):
                 data = {};
                 data["title"] = $("meta[itemprop='name']")[0].getAttribute("content");
                 data["tags"] = $("span.elem_genre").text();
-                data["chapters"] = Object();
+                data["chapters"] = {};
                 i = 0;
                 rm_h.chapters.changeOrder();
                 $(".item-title").each(function () {

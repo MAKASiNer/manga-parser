@@ -23,7 +23,7 @@ class Logger:
     def logging(self, func):
         def wrapper(*args, **kwargs):
             if self.debug:
-                self.log('{} FROM {} WITH *{} **{} =>'.format(
+                self.log('{} FROM {} WITH *{} **{} => '.format(
                     func.__name__,
                     func.__module__,
                     args,
@@ -31,7 +31,7 @@ class Logger:
                 ), nl=False)
 
             else:
-                self.log('{}.{} =>'.format(
+                self.log('{}.{} => '.format(
                     func.__module__,
                     func.__name__,
                 ), nl=False)
@@ -39,9 +39,9 @@ class Logger:
             res = func(*args, **kwargs)
 
             if self.debug:
-                self.log(str(res), timepoint=False)
+                self.log(str(res))
             else:
-                self.log(type(res), timepoint=False)
+                self.log(type(res))
             return res
 
         return wrapper

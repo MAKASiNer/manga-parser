@@ -10,7 +10,7 @@ PACK_FOLDER = os.path.abspath("downloads")
 INSTALED_MODULES = [
     "ReadMangaIo",
     "MintMangaLive",
-    "empty",
+    "MangaMammyRu",
 ]
 
 DEFAULT_MODULE = INSTALED_MODULES[0]
