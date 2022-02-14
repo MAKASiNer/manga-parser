@@ -1,0 +1,42 @@
+[18:04:20.035920] modules.ReadMangaIo.preload_tile => [19:46:23.180517] packers.pdf.save => [19:47:47.537167] packers.pdf.save => [19:47:47.537167] <class 'str'>
+[19:48:02.850898] packers.pdf.save => [19:48:02.850898] <class 'str'>
+[19:48:08.979471] packers.pdf.save => [19:48:08.979471] <class 'str'>
+[19:49:51.792218] packers.pdf.save => [19:49:51.792218] <class 'str'>
+[19:50:34.575356] packers.pdf.save => [19:50:34.575356] <class 'str'>
+[19:50:45.239878] packers.pdf.save => [19:50:45.239878] <class 'str'>
+[19:50:49.073106] packers.pdf.save => [19:50:49.073106] <class 'str'>
+[19:52:09.929512] packers.pdf.save => [19:52:09.929512] <class 'str'>
+[19:52:15.795502] packers.pdf.save => [19:52:15.795502] <class 'str'>
+[19:54:21.430766] packers.pdf.save => [19:54:21.430766] <class 'str'>
+[20:01:51.321890] modules.ReadMangaIo.preload_tile => [20:02:00.776814] <class 'core.module.TileInfo'>
+[20:02:00.778469] modules.ReadMangaIo.preload_chapter => [20:02:38.185686] modules.ReadMangaIo.preload_tile => [20:02:43.447982] <class 'core.module.TileInfo'>
+[20:02:43.451370] modules.ReadMangaIo.preload_chapter => [20:03:11.803694] modules.ReadMangaIo.preload_tile => [20:03:15.433908] <class 'core.module.TileInfo'>
+[20:03:15.436029] modules.ReadMangaIo.preload_chapter => [20:03:37.700715] <class 'core.module.ChapterInfo'>
+[20:04:59.825078] modules.ReadMangaIo.preload_tile => [20:05:04.289332] <class 'core.module.TileInfo'>
+[20:05:04.289332] modules.ReadMangaIo.preload_chapter => [20:05:25.928147] <class 'core.module.ChapterInfo'>
+[20:05:49.894107] packers.pdf.save => [20:06:42.229680] packers.pdf.save => [20:07:51.973617] packers.pdf.save => [20:07:51.981706] <class 'str'>
+[20:08:26.268006] packers.pdf.save => [20:08:26.268006] <class 'str'>
+[20:09:24.214181] packers.pdf.save => [20:09:24.214181] <class 'str'>
+[20:09:41.198100] packers.pdf.save => [20:09:41.198100] <class 'str'>
+[20:10:40.035833] modules.ReadMangaIo.preload_tile => [20:10:46.156774] <class 'core.module.TileInfo'>
+[20:10:46.156774] modules.ReadMangaIo.preload_chapter => [20:11:11.909746] <class 'core.module.ChapterInfo'>
+[20:11:35.493108] packers.pdf.save => [20:12:28.131463] modules.ReadMangaIo.preload_tile => [20:12:32.271862] <class 'core.module.TileInfo'>
+[20:12:32.273958] modules.ReadMangaIo.preload_chapter => [20:13:01.643265] <class 'core.module.ChapterInfo'>
+[20:13:25.961455] packers.pdf.save => [20:14:28.460601] modules.ReadMangaIo.preload_tile => [20:14:32.248556] <class 'core.module.TileInfo'>
+[20:14:32.249552] modules.ReadMangaIo.preload_chapter => [20:15:02.726659] <class 'core.module.ChapterInfo'>
+[20:15:31.568121] packers.pdf.save => [20:15:33.883906] <class 'str'>
+[20:15:33.883906] modules.ReadMangaIo.preload_chapter => [20:16:10.625412] <class 'core.module.ChapterInfo'>
+[20:16:24.262561] packers.pdf.save => [20:16:25.883050] <class 'str'>
+[20:31:12.172440] packers.pdf.scan => [20:31:12.193383] <class 'list'>
+[20:33:25.494908] packers.pdf.scan => [20:33:25.498566] <class 'itertools.chain'>
+[20:33:38.602044] packers.pdf.scan => [20:33:38.623983] <class 'itertools.chain'>
+[21:09:39.794455] modules.ReadMangaIo.search => [21:09:46.255344] <class 'list'>
+[21:10:26.082838] modules.ReadMangaIo.preload_tile => [21:10:29.729052] <class 'core.module.TileInfo'>
+[21:10:29.730050] modules.ReadMangaIo.preload_chapter => [21:10:49.210996] <class 'core.module.ChapterInfo'>
+[21:11:03.744112] packers.pdf.save => [21:11:05.809162] <class 'str'>
+[21:11:05.809162] modules.ReadMangaIo.preload_chapter => [21:11:19.508220] <class 'core.module.ChapterInfo'>
+[21:11:33.435865] modules.ReadMangaIo.preload_tile => [21:11:58.385708] modules.ReadMangaIo.preload_tile => [21:12:03.149156] <class 'core.module.TileInfo'>
+[21:12:03.157151] modules.ReadMangaIo.preload_chapter => [21:12:23.690886] <class 'core.module.ChapterInfo'>
+[21:12:45.440222] packers.pdf.save => [21:12:48.020688] <class 'str'>
+[21:12:48.020688] modules.ReadMangaIo.preload_chapter => [21:13:05.575417] <class 'core.module.ChapterInfo'>
+[21:13:17.811271] packers.pdf.save => [21:13:20.112456] <class 'str'>

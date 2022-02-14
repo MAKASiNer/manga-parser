@@ -31,11 +31,11 @@ class Module(BaseModule):
             }
         """
 
-        with self._get(url) as response:
+        with self.get(url) as response:
             data = response.html.render(
                 script=script1, reload=False, timeout=timeout)
 
-        with self._post(url + "ajax/chapters/") as response:
+        with self.post(url + "ajax/chapters/") as response:
             chapters: dict = response.html.render(
                 script=script2, reload=False, timeout=timeout)
             data["chapters"] = dict(
@@ -79,12 +79,12 @@ class Module(BaseModule):
             }
         """
 
-        with self._get(url) as response:
+        with self.get(url) as response:
             data = response.html.render(
                 script=script1, reload=False, timeout=timeout)
 
         for link in data["links"]:
-            with self._get(link) as response:
+            with self.get(link) as response:
                 data["pages"] += response.html.render(
                     script=script2, reload=False, timeout=timeout)
 

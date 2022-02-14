@@ -3,7 +3,8 @@ import asyncio
 import requests
 from PIL import Image
 from io import BytesIO
-from core.settings import PROXYIES
+
+from core.settings import *
 
 
 class Loader():
@@ -64,6 +65,8 @@ class Loader():
                 result += [Image.open(BytesIO(r.content))]
             except BaseException:
                 result += [r.content]
+        
+        return result
 
 
 def is_url(url: str) -> bool:

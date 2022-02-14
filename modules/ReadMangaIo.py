@@ -22,7 +22,7 @@ class Module(BaseModule):
             }
         """
 
-        with self._post(self.server + "/search", {"q": q}) as response:
+        with self.post(self.server + "/search", {"q": q}) as response:
             data = response.html.render(
                 script=script, reload=False, timeout=timeout)
             if len(data) > offset:
@@ -56,7 +56,7 @@ class Module(BaseModule):
             }
         """
 
-        with self._get(url) as response:
+        with self.get(url) as response:
             data = response.html.render(script=script, timeout=timeout)
 
         def f(item):
@@ -83,7 +83,7 @@ class Module(BaseModule):
             }
         """
 
-        with self._get(url, {"mtr": 1}) as response:
+        with self.get(url, {"mtr": 1}) as response:
             data = response.html.render(script=script, timeout=timeout)
 
         return ChapterInfo(

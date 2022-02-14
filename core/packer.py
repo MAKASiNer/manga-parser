@@ -1,88 +1,78 @@
 import os
-from PIL import Image
+from glob import glob
+from itertools import chain
+from pathvalidate import sanitize_filename
+
 from core.module import *
 
 
-class Packer:
-    def __init__(self, folder: str):
-        self.folder = None
-        if os.path.isdir(folder):
-            self.folder = folder
-        else:
-            raise FileNotFoundError("Incorrect packer folder")
+class BasePacker:
 
-    def save_pdf(self, name: str, imgs: list[Image.Image]) -> str:
-        if ".pdf" not in name.lower():
-            name += ".pdf"
+    extension: str = str()
+    '''file extension'''
 
-        for i in range(len(imgs)):
-            imgs[i] = imgs[i].convert("RGB")
+    def __init__(self):
+        if sanitize_filename(self.extension) != self.extension:
+            raise ValueError(f"Incorrect file extension '.{self.extension}'")
 
-        path = os.path.join(self.folder, name)
-        imgs[0].save(path, save_all=True, append_images=imgs[1:])
-        return path
-
-    def save_img(self, name: str, imgs: list[Image.Image], ext: str = "png") -> list[str]:
-        paths = list()
-        for i in range(len(imgs)):
-            img = imgs[i].convert("RGB")
-            paths += [os.path.join(self.folder, f"{name}_{i}.{ext}")]
-            img.save(paths[-1])
-
-        return paths
-
-    def save_text(self, name: str, texts: list[str]) -> str:
-        from xml.etree import ElementTree
-
-        html = ElementTree.Element('html')
-
-        head = ElementTree.Element('head')
-        meta = ElementTree.Element('meta', attrib={'charset': 'UTF-8'})
-        head.append(meta)
-
-        body = ElementTree.Element('body')
-        for text in texts:
-            div = ElementTree.Element('div',
-                                      attrib={"style": "page-break-after:always;"})
-            div.text = text
-            body.append(div)
-
-        html.append(head)
-        html.append(body)
-
-        name += '.html' if '.html' not in name.lower() else ''
-        path = os.path.join(self.folder, name)
-        ElementTree.ElementTree(html).write(path)
-        return path
-
-    def scan(self, ext="pdf") -> list[str]:
+    def scan(self, directory: str) -> list[str]:
         '''
-        This function scans the folder for files and returns a list of their paths
+        It scans a directory and returns a list of all the files in that directory.
+        
+        Args:
+          directory (str): The directory to scan.
+        
+        Returns:
+          A list of all the files in the given directory.
+        '''
+        result = (chain.from_iterable(
+            glob(os.path.join(x[0], f"*.{self.extension}")) for x in os.walk(directory)))
+        return [os.path.abspath(r) for r in result]
+
+    def correct_path(self, path: str) -> str:
+        '''
+        Add the file extension to the file name
+        
+        Args:
+          path (str): The path to the file.
+        
+        Returns:
+          The path to the file with the correct extension.
+        '''
+        if f".{self.extension}" not in os.path.split(path)[-1]:
+            path += f".{self.extension}"
+        return path
+
+    @property
+    def save_defined(self) -> bool:
+        return not is_empty_function(self.save)
+
+    @property
+    def join_defined(self) -> bool:
+        return not is_empty_function(self.join)
+
+    # --------------------------------------------------------
+    def save(self, name: str, contents: list) -> str:
+        '''
+        Save the contents to the files
 
         Args:
-            ext: The file extension to search for. Defaults to pdf.
+            name (str): The name of the files to be saved.
+            contents (list): List of content.
 
         Returns:
-            A list of strings.
+            Absolute paths to saved file.
         '''
-        pdfs = []
-        for f in os.listdir(self.folder):
-            if f".{ext}" in f.lower():
-                pdfs.append(os.path.join(self.folder, f))
-        return pdfs
 
-    @staticmethod
-    def join(name: str, pdfs: list[str]):
+    def join(self, name: str, paths: list[str]) -> str:
         '''
-        It joins pdfs into one pdf.
+        This function joins a files together
 
         Args:
-          name (str): The name of the file to be created.
-          pdfs (list[str]): list of pdf files.
-        '''
-        from PyPDF2 import PdfFileMerger
+            name (str): The name of the final result.
+            paths (list[str]): A list of files paths to join.
 
-        book = PdfFileMerger()
-        [book.append(pdf) for pdf in pdfs]
-        book.write(name + ".pdf" if ".pdf" not in name.lower() else "")
-        book.close()
+        Returns:
+            Absolute path to the saved file.
+        '''
+    # --------------------------------------------------------

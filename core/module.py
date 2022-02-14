@@ -2,6 +2,7 @@ import re
 import dis
 import requests_html
 from functools import *
+
 from core.settings import *
 
 
@@ -82,18 +83,21 @@ class BaseModule:
             raise ValueError(
                 f"Incorrect server '{self.server}' (must contain protocol and domain)")
 
-    def _get(self, url, params=None):
+    def get(self, url, params=None):
         return self.session.get(url, params=params, proxies=self.proxies)
 
-    def _post(self, url, params=None):
+    def post(self, url, params=None):
         return self.session.post(url, data=params, proxies=self.proxies)
 
+    @property
     def search_defined(self) -> bool:
         return not is_empty_function(self.search)
 
+    @property
     def preload_chapter_defined(self) -> bool:
         return not is_empty_function(self.preload_chapter)
 
+    @property
     def preload_tile_defined(self) -> bool:
         return not is_empty_function(self.preload_tile)
 
