@@ -309,27 +309,26 @@ def _load(context, url, auto, timeout, output, begin, offset) -> list[str]:
 
     paths = list()
     for i, chapter in chapters:
-        click.echo(f"The preloading of '{chapter.url}' has started")
+        click.echo(f"The preloading of '{chapter.url}'...", nl=False)
         chapter = _preload_chapter(context, chapter.url, auto, timeout)
-        click.echo(f"Preloading has finished")
+        click.echo(f"finishs")
 
-        click.echo(f"The loading of '{chapter.url}' has started")
+        click.echo(f"The loading of '{chapter.url}'...", nl=False)
         contents = LOADER.load_auto(chapter.pages)
-        click.echo(f"Loading has finished")
+        click.echo(f"finish")
 
         name = sanitize_filename(chapter.title)
-        path = os.path.join(output, sanitize_filename(tile.title), i.rjust(4, "0") )
+        path = os.path.join(output, sanitize_filename(tile.title), i.rjust(5, "0") )
         os.makedirs(path, exist_ok=True)
         paths += [_save(context, contents, os.path.join(path, name))]
     return paths
 
 
 if __name__ == "__main__":
-    app(obj={})
-    # try:
-    #    app(obj={})
-    # except BaseException as err:
-    #    click.echo(err)
+    try:
+       app(obj={})
+    except BaseException as err:
+       click.echo(err)
 
     SESSION.close()
     LOOP.close()
