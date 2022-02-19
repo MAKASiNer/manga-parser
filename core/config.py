@@ -22,7 +22,7 @@ MODULES: list[BaseModule] = []
 for m in INSTALED_MODULES:
     try:
         module = import_module(f"modules.{m}").Module()
-    except (ModuleNotFoundError, ValueError) as err:
+    except (ModuleNotFoundError, ValueError, AttributeError) as err:
         LOGGER.log(err)
         module = BaseModule()  
     MODULES.append(module)
@@ -32,7 +32,7 @@ PACKERS: list[BasePacker] = []
 for p in INSTALED_PACKERS:
     try:
         packer = import_module(f"packers.{p}").Packer()
-    except (ModuleNotFoundError, ValueError) as err:
+    except (ModuleNotFoundError, ValueError, AttributeError) as err:
         LOGGER.log(err)
         packer = BasePacker()  
     PACKERS.append(packer)

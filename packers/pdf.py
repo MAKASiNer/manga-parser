@@ -24,7 +24,6 @@ class Packer(BasePacker):
             imgs[0].save(name, save_all=True, append_images=imgs[1:])
             return name
 
-        os.walk()
         return str()
 
     @LOGGER.logging
