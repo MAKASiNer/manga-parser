@@ -222,19 +222,19 @@ def _preload_chapter(context, url, auto, timeout) -> ChapterInfo:
 
 
 @app.command(help="Save content")
-@click.option('-c', '--content', multiple=True, required=True, help="Content list.")
+@click.option('-i', '--input', multiple=True, required=True, help="Content list.")
 @click.option('-o', '--output', required=True, help="Output file name.")
 @click.option('-s', '--show', is_flag=True, help="Show execution result.")
 @click.pass_context
-def save(context, content, output, show) -> str:
-    result = _save(context, content, output)
+def save(context, input, output, show) -> str:
+    result = _save(context, input, output)
     if show:
         click.echo()
         click.echo(result)
     return result
 
 
-def _save(context, content, output) -> str:
+def _save(context, input, output) -> str:
     i = INSTALED_PACKERS.index(context.obj["PACKER"])
     packer = PACKERS[i]
 
@@ -243,8 +243,40 @@ def _save(context, content, output) -> str:
             f"The packer '{INSTALED_PACKERS[i]}' is unable to execute this command.")
         return str()
 
-    path = packer.save(output, content)
+    path = packer.save(output, input)
     return path
+
+
+@app.command(help="Join content")
+@click.option('-i', '--input', multiple=True, required=True, help="Input files paths.")
+@click.option('-o', '--output', required=True, help="Output file name.")
+@click.option('-s', '--show', is_flag=True, help="Show execution result.")
+@click.pass_context
+def join(context, input, output, show) -> str:
+    result = _join(context, input, output)
+    if show:
+        click.echo()
+        click.echo(result)
+    return result
+
+
+def _join(context, input, output) -> str:
+    i = INSTALED_PACKERS.index(context.obj["PACKER"])
+    packer = PACKERS[i]
+
+    if not packer.join_defined:
+        click.echo(
+            f"The packer '{INSTALED_PACKERS[i]}' is unable to execute this command.")
+        return str()
+    
+    for path in input:
+        if not os.path.exists(path):
+            click.echo(f"Input file '{path}' does not exist.")
+            sys.exit()
+
+    path = packer.join(output, input)
+    return path
+
 
 
 @app.command(help="Loads chapters and saves them.")
@@ -281,12 +313,12 @@ def _load(context, url, auto, timeout, output, begin, offset) -> list[str]:
         chapter = _preload_chapter(context, chapter.url, auto, timeout)
         click.echo(f"Preloading has finished")
 
-        click.echo(f"The loading of has started")
+        click.echo(f"The loading of '{chapter.url}' has started")
         contents = LOADER.load_auto(chapter.pages)
         click.echo(f"Loading has finished")
 
         name = sanitize_filename(chapter.title)
-        path = os.path.join(output, sanitize_filename(tile.title), i)
+        path = os.path.join(output, sanitize_filename(tile.title), i.rjust(4, "0") )
         os.makedirs(path, exist_ok=True)
         paths += [_save(context, contents, os.path.join(path, name))]
     return paths
